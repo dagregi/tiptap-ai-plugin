@@ -1,0 +1,125 @@
+.tiptap {
+    :first-child {
+        margin-top: 0;
+    }
+
+    b {
+        font-weight: 900;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        margin-top: 24px;
+        margin-bottom: 16px;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    h2 {
+        font-size: 1.5em;
+    }
+
+    h3 {
+        font-size: 1.17em;
+    }
+
+    h4,
+    h5,
+    h6 {
+        font-size: 1em;
+    }
+
+    a {
+        color: #58a6ff;
+        text-decoration: none;
+    }
+
+    a:hover {
+        text-decoration: underline;
+    }
+
+    ul,
+    ol {
+        padding-left: 20px;
+    }
+
+    code {
+        background-color: #242424;
+        border-radius: 6px;
+        color: #d2a8ff;
+        padding: 0.2em 0.4em;
+        font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo,
+            monospace;
+    }
+
+    pre code {
+        padding: 0;
+    }
+
+    pre {
+        background-color: #242424;
+        border-radius: 6px;
+        padding: 0.2em 0.4em;
+    }
+
+    blockquote {
+        background-color: #242424;
+        border-left: 4px solid #30363d;
+        padding-left: 2em;
+        margin-left: 0;
+        padding-top: 0.5em;
+        padding-bottom: 0.5em;
+        padding-right: 0.5em;
+        color: #8b949e;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 6px;
+    }
+
+    hr {
+        border: none;
+        border-top: 1px solid #b0b0b0;
+        margin: 2rem 0;
+    }
+
+    p.is-editor-empty:first-child::before {
+        color: #909090;
+        content: attr(data-placeholder);
+        float: left;
+        height: 0;
+        pointer-events: none;
+    }
+    .is-empty::before {
+        color: #909090;
+        content: attr(data-placeholder);
+        float: left;
+        height: 0;
+        pointer-events: none;
+    }
+}
+
+#bubble-menu {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    display: flex;
+    padding: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#bubble-menu button {
+    background: none;
+    border: none;
+    margin: 0 4px;
+    padding: 4px;
+    cursor: pointer;
+}
