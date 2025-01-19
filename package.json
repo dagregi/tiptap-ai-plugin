@@ -27,6 +27,7 @@
 		"@tiptap/extension-bubble-menu": "^2.11.2",
 		"@tiptap/extension-placeholder": "^2.11.2",
 		"@tiptap/pm": "^2.11.2",
-		"@tiptap/starter-kit": "^2.11.2"
+		"@tiptap/starter-kit": "^2.11.2",
+		"svelte-tiptap": "^2.1.0"
 	}
 }

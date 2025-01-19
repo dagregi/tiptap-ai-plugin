@@ -106,20 +106,3 @@
         pointer-events: none;
     }
 }
-
-#bubble-menu {
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    display: flex;
-    padding: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-#bubble-menu button {
-    background: none;
-    border: none;
-    margin: 0 4px;
-    padding: 4px;
-    cursor: pointer;
-}
