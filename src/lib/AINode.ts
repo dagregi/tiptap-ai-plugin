@@ -1,6 +1,7 @@
 import { Node, mergeAttributes } from "@tiptap/core";
 import { SvelteNodeViewRenderer } from "svelte-tiptap";
 import AIExtension from "$lib/AIExtension.svelte";
+import { DOMSerializer } from "@tiptap/pm/model";
 
 export interface AINodeOptions {
     HTMLAttributes: Record<string, any>;
@@ -23,6 +24,7 @@ declare module "@tiptap/core" {
 const AINode = Node.create<AINodeOptions>({
     name: "aiNode",
     group: "block",
+	atom: true,
 
     addAttributes() {
         return {
@@ -69,14 +71,16 @@ const AINode = Node.create<AINodeOptions>({
                 (attributes) =>
                 ({ editor, chain }) => {
                     const { from, to } = editor.state.selection;
-                    const selectedText = editor.state.doc.textBetween(
-                        from,
-                        to,
-                        "\u0000",
-                        "\u0000",
-                    );
 
-                    if (!selectedText.trim()) {
+                    const selectedFragment = editor.state.doc.slice(from, to);
+                    const serializer = DOMSerializer.fromSchema(editor.schema);
+                    const div = document.createElement("div");
+                    div.appendChild(
+                        serializer.serializeFragment(selectedFragment.content),
+                    );
+                    const selectedHTML = div.innerHTML;
+
+                    if (!selectedHTML.trim()) {
                         console.error("No text selected for regeneration.");
                         return false;
                     }
@@ -86,7 +90,7 @@ const AINode = Node.create<AINodeOptions>({
                             type: this.name,
                             attrs: {
                                 ...attributes,
-                                selectedText,
+                                selectedText: selectedHTML,
                             },
                         })
                         .run();

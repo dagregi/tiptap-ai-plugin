@@ -44,9 +44,22 @@
         text-decoration: underline;
     }
 
+    ul {
+        list-style-type: disc;
+        margin-left: 1.5rem;
+    }
+
+    ol {
+        list-style-type: decimal;
+        margin-left: 1.5rem;
+    }
     ul,
     ol {
-        padding-left: 20px;
+        padding-left: 10px;
+    }
+
+    li {
+        margin-bottom: 0.5rem;
     }
 
     code {

@@ -18,6 +18,11 @@ export const POST: RequestHandler = async ({ fetch, request }) => {
                     model: "gpt-4o-mini",
                     messages: [
                         {
+                            role: "developer",
+                            content:
+                                "You are a helpful assistant. Keep the original HTML structure, including headings, bold, italics, lists, and other formatting. Only modify the content as requested and just do what you're asked.",
+                        },
+                        {
                             role: "user",
                             content: `${prompt}\n\n${text}`,
                         },
