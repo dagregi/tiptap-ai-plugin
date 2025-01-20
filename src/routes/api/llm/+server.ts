@@ -1,4 +1,4 @@
-import { json } from "@sveltejs/kit";
+import { json, error } from "@sveltejs/kit";
 import type { RequestHandler } from "@sveltejs/kit";
 import { OPENAI_API_KEY } from "$env/static/private";
 
@@ -31,15 +31,25 @@ export const POST: RequestHandler = async ({ fetch, request }) => {
             },
         );
 
+        if (!response.ok) {
+            const errorText = await response.text();
+            return error(response.status, {
+                message: `API Error: ${errorText}`,
+            });
+        }
+
         const data = await response.json();
         return json({
             status: 200,
             body: { result: data.choices[0].message.content },
         });
-    } catch (error) {
-        return json({
-            status: 500,
-            body: { error: `Failed to connect to OpenAI API` },
-        });
+    } catch (err: any) {
+        if (err instanceof TypeError && err.message.includes("fetch")) {
+            return error(503, {
+                message:
+                    "Network Error: Unable to connect to the server. Please check your internet connection.",
+            });
+        }
+        return error(500, { message: `Unexpected error: ${err.message}` });
     }
 };

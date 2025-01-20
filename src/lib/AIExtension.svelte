@@ -9,9 +9,12 @@
 	let selectedText: string = $state(props.node.attrs.selectedText || "");
 	let responseText: string = $state("");
 	let isLoading: boolean = $state(false);
+	let errorMessage: string = $state("");
 
 	async function handleSubmit(event: Event) {
 		event.preventDefault();
+
+		errorMessage = "";
 
 		if (!selectedText) return;
 
@@ -22,7 +25,7 @@
 		}
 
 		if (!inputValue.trim()) {
-			console.error("Prompt cannot be empty.");
+			errorMessage = "Prompt cannot be empty.";
 			return;
 		}
 
@@ -38,15 +41,30 @@
 				}),
 			});
 
-			if (!response.ok) throw new Error("Error fetching AI response.");
+			if (!response.ok) {
+				const errorData = await response.json();
+				if (response.status == 503) {
+					errorMessage = "Please check your internet connection.";
+				} else if (response.status == 500) {
+					errorMessage = "Server encontered an error.";
+				} else {
+					errorMessage =
+						errorData.error?.message ||
+						`Server responded with status: ${response.status}`;
+				}
+				throw new Error(errorMessage);
+			}
 
 			const data = await response.json();
 			responseText = data.body.result;
-		} catch (error) {
-			console.error("Error:", error);
+		} catch (error: any) {
+			errorMessage = error.message || "An unexpected error occurred.";
 		} finally {
 			isLoading = false;
-			insertAndDelete();
+
+			if (!errorMessage) {
+				insertAndDelete();
+			}
 		}
 	}
 
@@ -86,6 +104,11 @@
 		<div class="mt-4 flex items-center gap-2 text-sm text-gray-500">
 			<Spinner />
 			<span>Loading AI response...</span>
+		</div>
+	{/if}
+	{#if errorMessage}
+		<div class="mt-4 text-sm text-red-600">
+			{errorMessage}
 		</div>
 	{/if}
 </NodeViewWrapper>

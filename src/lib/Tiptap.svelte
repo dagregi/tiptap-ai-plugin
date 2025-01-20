@@ -34,7 +34,7 @@
 					},
 				}),
 			],
-			content: "Hello World!",
+			content: "",
 			onTransaction: () => {
 				editor = editor;
 			},
