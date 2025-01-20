@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { NodeViewProps } from "@tiptap/core";
 	import { NodeViewWrapper } from "svelte-tiptap";
+	import Spinner from "./Spinner.svelte";
 
 	let props: NodeViewProps = $props();
 
@@ -40,24 +41,22 @@
 			if (!response.ok) throw new Error("Error fetching AI response.");
 
 			const data = await response.json();
-			responseText = data.body.result || "No response received.";
+			responseText = data.body.result;
 		} catch (error) {
 			console.error("Error:", error);
-			responseText = "Failed to fetch response.";
 		} finally {
 			isLoading = false;
+			insertAndDelete();
 		}
 	}
 
 	function insertAndDelete() {
-		if (!responseText.trim()) return;
-
 		props.editor
 			.chain()
 			.focus()
 			.insertContentAt(
 				props.editor.state.selection.$anchor.pos,
-				responseText,
+				responseText.trim(),
 			)
 			.run();
 
@@ -66,16 +65,12 @@
 	}
 </script>
 
-<NodeViewWrapper class="p-4 bg-white border rounded-lg shadow">
-	<form onsubmit={handleSubmit} class="flex flex-col gap-4">
-		<label for="aiPrompt" class="block text-sm font-medium text-gray-700"
-			>Prompt</label
-		>
+<NodeViewWrapper>
+	<form onsubmit={handleSubmit} class="flex space-x-2 p-2 relative">
 		<input
-			id="aiPrompt"
 			type="text"
 			bind:value={inputValue}
-			class="rounded p-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+			class="flex-grow px-4 border border-gray-300 rounded-[25px] shadow focus:outline-none focus:ring-1 focus:ring-gray-500"
 			placeholder="Enter a custom prompt"
 		/>
 		<button
@@ -83,26 +78,14 @@
 			class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:bg-gray-400 disabled:cursor-not-allowed"
 			disabled={isLoading}
 		>
-			{isLoading ? "Generating..." : "Generate"}
+			{isLoading ? "..." : "Generate"}
 		</button>
 	</form>
 
 	{#if isLoading}
-		<div class="mt-4 text-sm text-gray-500">Loading AI response...</div>
-	{:else if responseText}
-		<div
-			class="mt-4 p-2 bg-gray-50 border border-gray-200 rounded-md text-sm"
-		>
-			{responseText}
+		<div class="mt-4 flex items-center gap-2 text-sm text-gray-500">
+			<Spinner />
+			<span>Loading AI response...</span>
 		</div>
-	{/if}
-
-	{#if responseText && !isLoading}
-		<button
-			onclick={insertAndDelete}
-			class="mt-4 inline-flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-		>
-			Insert
-		</button>
 	{/if}
 </NodeViewWrapper>

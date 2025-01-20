@@ -24,7 +24,7 @@ declare module "@tiptap/core" {
 const AINode = Node.create<AINodeOptions>({
     name: "aiNode",
     group: "block",
-	atom: true,
+    atom: true,
 
     addAttributes() {
         return {
