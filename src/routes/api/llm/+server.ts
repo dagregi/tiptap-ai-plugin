@@ -20,11 +20,11 @@ export const POST: RequestHandler = async ({ fetch, request }) => {
                         {
                             role: "developer",
                             content:
-                                "You are a helpful assistant. Keep the original HTML structure, including headings, bold, italics, lists, and other formatting. Only modify the content as requested and just do what you're asked.",
+                                "You are a helpful assistant. Keep the original HTML structure, including headings, bold, italics, lists, and other formatting. Don't add extra blank lines. Only modify the content as requested and just do what you're asked. Keep the original html structure",
                         },
                         {
                             role: "user",
-                            content: `${prompt}\n\n${text}`,
+                            content: `${text}\n\n${prompt}`,
                         },
                     ],
                 }),

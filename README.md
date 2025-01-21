@@ -1,38 +1,42 @@
-# sv
+# Tiptap AI Editor
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+This project implements a text editor using Tiptap that allows users to select text and regenerate it using AI.
 
-## Creating a project
+## Features
 
-If you're seeing this, you've probably already done this step. Congrats!
+- Select text and regenerate it using an AI API.
+- Inline input for custom prompts.
+- Responsive design.
 
-```bash
-# create a new project in the current directory
-npx sv create
+## Installation
 
-# create a new project in my-app
-npx sv create my-app
+Make sure you have an `.env` file with the variable `OPENAI_API_KEY` for the AI response.
+
+1. Clone the repository.
+2. Install dependencies:
+    ```bash
+    npm install
+    ```
+3. Start the development server
+    ```bash
+    npm run dev
+    ```
+
+## Usage
+
+To use the extension add `AINode` to the list of extension.
+
+```ts
+// example configuration
+editor = new Editor({
+    element: "",
+    extensions: [
+        StarterKit,
+        AINode.configure({ endpoint: "/api/llm" }),
+    ],
+    content: "",
+    onTransaction: () => {
+        editor = editor;
+    },
+});
 ```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.

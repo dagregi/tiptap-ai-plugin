@@ -9,19 +9,11 @@
 	let element: Element | undefined;
 	let editor: Editor;
 
-	function addAINode() {
-		editor
-			.chain()
-			.focus()
-			.regenerateSelectedText({ endpoint: "/api/llm" })
-			.run();
-	}
-
 	onMount(() => {
 		editor = new Editor({
 			element: element,
 			extensions: [
-				AINode,
+				AINode.configure({ endpoint: "/api/llm" }),
 				StarterKit,
 				Placeholder.configure({
 					placeholder: "Start typing...",
@@ -50,10 +42,15 @@
 
 <div
 	id="bubble-menu"
-	class="m-0 flex h-10 w-fit min-w-0 flex-shrink items-center rounded-xl border border-token-border-light bg-gray-100 shadow-xl p-1"
+	class="m-0 flex h-10 w-fit min-w-0 flex-shrink items-center rounded-xl border bg-gray-100 shadow-xl p-1"
 >
 	<button
-		on:click={addAINode}
+		on:click={() =>
+			editor
+				.chain()
+				.focus()
+				.regenerateSelectedText({ endpoint: "/api/llm" })
+				.run()}
 		class="flex h-full items-center gap-1 rounded-lg px-2.5 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed dark:hover:bg-token-main-surface-secondary disabled:hover:bg-transparent"
 	>
 		<svg

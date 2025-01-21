@@ -4,7 +4,15 @@ import AIExtension from "$lib/AIExtension.svelte";
 import { DOMSerializer } from "@tiptap/pm/model";
 
 export interface AINodeOptions {
+    /**
+     * HTML attributes to add to the node.
+     */
     HTMLAttributes: Record<string, any>;
+
+    /**
+     * The API endpoint for generating AI content.
+     * @default ""
+     */
     endpoint: string;
 }
 
@@ -21,15 +29,26 @@ declare module "@tiptap/core" {
     }
 }
 
+/**
+ * AINode is a custom node for the Tiptap editor that allows users to regenerate selected text using AI.
+ * It provides an interface for interacting with an AI API endpoint.
+ */
 const AINode = Node.create<AINodeOptions>({
     name: "aiNode",
     group: "block",
     atom: true,
 
+    addOptions() {
+        return {
+            HTMLAttributes: {},
+            endpoint: "",
+        };
+    },
+
     addAttributes() {
         return {
             endpoint: {
-                default: "/api/llm",
+                default: this.options.endpoint,
                 parseHTML: (element) => element.getAttribute("data-endpoint"),
                 renderHTML: (attributes) => {
                     return { "data-endpoint": attributes.endpoint };
@@ -47,11 +66,7 @@ const AINode = Node.create<AINodeOptions>({
     },
 
     parseHTML() {
-        return [
-            {
-                tag: "ai-node",
-            },
-        ];
+        return [{ tag: "ai-node" }];
     },
 
     renderHTML({ HTMLAttributes }) {
